@@ -1,0 +1,42 @@
+--------------------------------------------------
+--  DDL for FUNCTION RB_F_TGK_GET_LEAVES_ENTITY
+--------------------------------------------------
+
+CREATE OR REPLACE FUNCTION RB_F_TGK_GET_LEAVES_ENTITY (
+  HIERARCHY_CODE IN VARCHAR2,
+  HIERARCHY_NODE_CODE IN VARCHAR2
+)
+RETURN RB_VARCHAR2_TABLE PIPELINED
+AS
+--  This function will return a table of a sigle column (COLUMN_VALUE)
+--  of all Elements that belongs to a certain HIERARCHY_NODE_CODE in a given
+--  HIERARCHY_CODE
+BEGIN
+  FOR R IN (
+    SELECT
+      A.COD_AZIENDA
+    FROM
+      (
+        SELECT DISTINCT
+          COD_AZIENDA_GERARCHIA,
+          COD_AZIENDA_ELEGER
+        FROM
+          AZIENDA_GERARCHIA
+        WHERE
+          COD_AZIENDA_GERARCHIA = HIERARCHY_CODE
+        START WITH COD_AZIENDA_ELEGER = HIERARCHY_NODE_CODE
+        CONNECT BY PRIOR COD_AZIENDA_ELEGER = COD_AZIENDA_ELEGER_PADRE
+      ) H
+      INNER JOIN
+      AZIENDA_GERARCHIA_ABBI A
+      ON
+          H.COD_AZIENDA_GERARCHIA = A.COD_AZIENDA_GERARCHIA
+      AND H.COD_AZIENDA_ELEGER = A.COD_AZIENDA_ELEGER
+  ) LOOP
+  
+    PIPE ROW(R.COD_AZIENDA);
+  
+  END LOOP;
+  
+  RETURN;
+END;
