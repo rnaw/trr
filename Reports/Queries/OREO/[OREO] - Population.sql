@@ -129,7 +129,7 @@ FROM
             NULL AS "OREO_APPRAISAL_DATE",
             CASE
                 WHEN NVL(C.ATTRIBUTO1, 'OCBA') = 'OCBA'
-                    THEN D.IMPORTO * 1000
+                    THEN D.IMPORTO2 * 1000
                 ELSE NULL
             END AS "OREO_CURRENT_BAL_ACCUMULATOR",
             NULL AS "OREO_LOSS_ON_SALE",
@@ -142,7 +142,7 @@ FROM
             NULL AS "FORECLOSURE_SALE_DATE",
             CASE
                 WHEN NVL(C.ATTRIBUTO1, 'OCBA') = 'OCBA'
-                    THEN D.IMPORTO * 1000
+                    THEN D.IMPORTO2 * 1000
                 ELSE NULL
             END AS "LOSS_SHARE_VALUE",
             NULL AS "MATURITY_DATE",
@@ -359,9 +359,9 @@ FROM
             INNER JOIN
             RB_V_OREO OREO
             ON
-              B.DATA_1 = BOR.MONTH_END_DATE
-              AND B.TESTO_1 = BOR.REPORTING_ENTITY
-              AND B.IMPORTO_14 = BOR.RB_ROWID
+              B.DATA_1 = OREO.MONTH_END_DATE
+              AND B.TESTO_1 = OREO.REPORTING_ENTITY
+              AND B.IMPORTO_14 = OREO.RB_ROWID
         WHERE
             A.COD_SCENARIO IN (${$Scenario.code})
             AND A.COD_PERIODO IN (${$Period.code})
@@ -442,7 +442,7 @@ FROM
                     THEN SUBSTR(D.COD_DEST2, 5)
                 ELSE NULL
             END AS "OPERATING_UNIT",
-            D.COD_AZI_CTP AS "AFFILIATE",
+            NULL AS "AFFILIATE",
             D.COD_DEST4 AS "CUST_CLASS",
             NULL AS "UMD1",
             NULL AS "UMD2",
@@ -592,7 +592,7 @@ FROM
                     THEN SUBSTR(D.COD_DEST2, 5)
                 ELSE NULL
             END AS "OPERATING_UNIT",
-            D.COD_AZI_CTP AS "AFFILIATE",
+            NULL AS "AFFILIATE",
             D.COD_DEST4 AS "CUST_CLASS",
             NULL AS "UMD1",
             NULL AS "UMD2",
@@ -706,5 +706,4 @@ FROM
         A.DATA_SOURCE DESC,
         A.RB_ROWID, 
         A.REPORTING_ENTITY,
-        A.INSTRUMENT,
-        A.SOURCE
+        A.INSTRUMENT_ID

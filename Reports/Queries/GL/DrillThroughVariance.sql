@@ -20,26 +20,26 @@ SELECT
   COALESCE(A.COD_AZI_CTP, P.COD_AZI_CTP) AS COD_AZI_CTP,
   COALESCE(A.COD_CATEGORIA, P.COD_CATEGORIA) AS COD_CATEGORIA,
   COALESCE(A.COD_DEST1, P.COD_DEST1) AS COD_DEST1,
-                CASE
-                                WHEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2),1 ,3) = 'BLC'
-                                                THEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 5)
-                                ELSE RB_F_TGK_SANITIZE_CODE(NULL)
-                END AS OPERATING_UNIT,
-                CASE
-                                WHEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2),1 ,3) = 'DPT'
-                                                THEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 5)
-                                ELSE RB_F_TGK_SANITIZE_CODE(NULL)
-                END AS DEPTID,
-                CASE
-                                WHEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP),1 ,3) = 'BLC'
-                                                THEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 5)
-                                ELSE RB_F_TGK_SANITIZE_CODE(NULL)
-                END AS AFFILIATE_OBU,
-                CASE
-                                WHEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP),1 ,3) = 'DPT'
-                                                THEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 5)
-                                ELSE NULL
-                END AS AFFILIATE_DEPTID,
+	CASE
+		WHEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 1, 3) = 'BLC'
+			THEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 5)
+		ELSE RB_F_TGK_SANITIZE_CODE(NULL)
+	END AS OPERATING_UNIT,
+	CASE
+		WHEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 1, 3) = 'DPT'
+			THEN SUBSTR(COALESCE(A.COD_DEST2, P.COD_DEST2), 5)
+		ELSE RB_F_TGK_SANITIZE_CODE(NULL)
+	END AS DEPTID,
+	CASE
+		WHEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 1, 3) = 'BLC'
+			THEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 5)
+		ELSE RB_F_TGK_SANITIZE_CODE(NULL)
+	END AS AFFILIATE_OBU,
+	CASE
+		WHEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 1, 3) = 'DPT'
+			THEN SUBSTR(COALESCE(A.COD_DEST2_CTP, P.COD_DEST2_CTP), 5)
+		ELSE NULL
+	END AS AFFILIATE_DEPTID,
   COALESCE(A.COD_DEST3, P.COD_DEST3) AS COD_DEST3,
   COALESCE(A.COD_DEST4, P.COD_DEST4) AS COD_DEST4,
   COALESCE(A.COD_DEST5, P.COD_DEST5) AS COD_DEST5,
@@ -69,22 +69,22 @@ FROM
     SUM(DATA.IMPORTO) AS IMPORTO,
     SUM(DATA.IMPORTO_VALUTA_ORIGINARIA) AS IMPORTO_VALUTA_ORIGINARIA
   FROM
-                  RB_DRILL_INSTRUMENT DRILL
+	  RB_DRILL_INSTRUMENT DRILL
   INNER JOIN
-                  RB_V_APP_GL DATA
-                  ON
-                                DRILL.OID_FORM_DATI = DATA.OID_DATI_SALDI_LORDI
+	  RB_V_APP_GL DATA
+	  ON
+		DRILL.OID_FORM_DATI = DATA.OID_DATI_SALDI_LORDI
   WHERE
-                  DRILL.COD_SCENARIO = ${A1}
-                  AND DRILL.COD_PERIODO = ${B1}
-                  AND DRILL.COD_AZIENDA IN (${$Entity.code})
+	  DRILL.COD_SCENARIO = ${A1}
+	  AND DRILL.COD_PERIODO = ${B1}
+	  AND DRILL.COD_AZIENDA IN (${$Entity.code})
     AND DRILL.COD_CONTO IN (${$Account.code})
-                  AND DRILL.COD_DEST1 IN (${$Cust_Dim1.code})
-                  AND DRILL.COD_DEST2 IN (${$Cust_Dim2.code})
-                  AND DRILL.COD_DEST3 IN (${$Cust_Dim3.code})
-                  AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
-                  AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
-                  AND DRILL.COD_CATEGORIA IN (${$Category.code})
+	  AND DRILL.COD_DEST1 IN (${$Cust_Dim1.code})
+	  AND DRILL.COD_DEST2 IN (${$Cust_Dim2.code})
+	  AND DRILL.COD_DEST3 IN (${$Cust_Dim3.code})
+	  AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
+	  AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
+	  AND DRILL.COD_CATEGORIA IN (${$Category.code})
   GROUP BY
     DATA.COD_CONTO,
     DATA.COD_AZIENDA,
@@ -99,7 +99,7 @@ FROM
     DATA.COD_VALUTA,
     DATA.COD_VALUTA_ORIGINARIA,
     DATA.NOTE
-                UNION ALL
+	UNION ALL
    SELECT
     'ADJUSTMENT' AS DATA_SOURCE,
     DATA.COD_CONTO,
@@ -115,21 +115,21 @@ FROM
     DATA.COD_VALUTA,
     DATA.COD_VALUTA2 AS COD_VALUTA_ORIGINARIA,
     DATA.NOTE,
-    SUM(DATA.IMPORTO) * 1000 AS IMPORTO,
+    SUM(DATA.IMPORTO2) * 1000 AS IMPORTO,
     SUM(DATA.IMPORTO2) * 1000 AS IMPORTO_VALUTA_ORIGINARIA
   FROM
     DATI_RETT_RIGA DATA
   WHERE
-                  DATA.COD_SCENARIO = ${A1}
-                  AND DATA.COD_PERIODO = ${B1}
-                  AND DATA.COD_AZIENDA IN (${$Entity.code})
-                  AND DATA.COD_CONTO IN (${$Account.code})
-                  AND DATA.COD_DEST1 IN (${$Cust_Dim1.code})
-                  AND DATA.COD_DEST2 IN (${$Cust_Dim2.code})
-                  AND DATA.COD_DEST3 IN (${$Cust_Dim3.code})
-                  AND DATA.COD_DEST4 IN (${$Cust_Dim4.code})
-                  AND DATA.COD_DEST5 IN (${$Cust_Dim5.code})
-                  AND DATA.COD_CATEGORIA IN (${$Category.code})
+	  DATA.COD_SCENARIO = ${A1}
+	  AND DATA.COD_PERIODO = ${B1}
+	  AND DATA.COD_AZIENDA IN (${$Entity.code})
+	  AND DATA.COD_CONTO IN (${$Account.code})
+	  AND DATA.COD_DEST1 IN (${$Cust_Dim1.code})
+	  AND DATA.COD_DEST2 IN (${$Cust_Dim2.code})
+	  AND DATA.COD_DEST3 IN (${$Cust_Dim3.code})
+	  AND DATA.COD_DEST4 IN (${$Cust_Dim4.code})
+	  AND DATA.COD_DEST5 IN (${$Cust_Dim5.code})
+	  AND DATA.COD_CATEGORIA IN (${$Category.code})
   GROUP BY
     DATA.COD_CONTO,
     DATA.COD_AZIENDA,
@@ -165,22 +165,22 @@ FULL OUTER JOIN
     SUM(DATA.IMPORTO) AS IMPORTO,
     SUM(DATA.IMPORTO_VALUTA_ORIGINARIA) AS IMPORTO_VALUTA_ORIGINARIA
   FROM
-                  RB_DRILL_INSTRUMENT DRILL
+	  RB_DRILL_INSTRUMENT DRILL
   INNER JOIN
-                  RB_V_APP_GL DATA
-                  ON
-                                DRILL.OID_FORM_DATI = DATA.OID_DATI_SALDI_LORDI
+	  RB_V_APP_GL DATA
+	  ON
+		DRILL.OID_FORM_DATI = DATA.OID_DATI_SALDI_LORDI
   WHERE
-                  DRILL.COD_SCENARIO = ${A2}
-                  AND DRILL.COD_PERIODO = ${B2}
-                  AND DRILL.COD_AZIENDA IN (${$Entity.code})
+	  DRILL.COD_SCENARIO = ${A2}
+	  AND DRILL.COD_PERIODO = ${B2}
+	  AND DRILL.COD_AZIENDA IN (${$Entity.code})
     AND DRILL.COD_CONTO IN (${$Account.code})
-                  AND DRILL.COD_DEST1 IN (${$Cust_Dim1.code})
-                  AND DRILL.COD_DEST2 IN (${$Cust_Dim2.code})
-                  AND DRILL.COD_DEST3 IN (${$Cust_Dim3.code})
-                  AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
-                  AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
-                  AND DRILL.COD_CATEGORIA IN (${$Category.code})
+	  AND DRILL.COD_DEST1 IN (${$Cust_Dim1.code})
+	  AND DRILL.COD_DEST2 IN (${$Cust_Dim2.code})
+	  AND DRILL.COD_DEST3 IN (${$Cust_Dim3.code})
+	  AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
+	  AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
+	  AND DRILL.COD_CATEGORIA IN (${$Category.code})
   GROUP BY
     DATA.COD_CONTO,
     DATA.COD_AZIENDA,
@@ -195,7 +195,7 @@ FULL OUTER JOIN
     DATA.COD_VALUTA,
     DATA.COD_VALUTA_ORIGINARIA,
     DATA.NOTE
-                UNION ALL
+	UNION ALL
    SELECT
     'ADJUSTMENT' AS DATA_SOURCE,
     DATA.COD_CONTO,
@@ -211,21 +211,21 @@ FULL OUTER JOIN
     DATA.COD_VALUTA,
     DATA.COD_VALUTA2 AS COD_VALUTA_ORIGINARIA,
     DATA.NOTE,
-    SUM(DATA.IMPORTO) * 1000 AS IMPORTO,
+    SUM(DATA.IMPORTO2) * 1000 AS IMPORTO,
     SUM(DATA.IMPORTO2) * 1000 AS IMPORTO_VALUTA_ORIGINARIA
   FROM
     DATI_RETT_RIGA DATA
   WHERE
-                  DATA.COD_SCENARIO = ${A2}
-                  AND DATA.COD_PERIODO = ${B2}
-                  AND DATA.COD_AZIENDA IN (${$Entity.code})
-                  AND DATA.COD_CONTO IN (${$Account.code})
-                  AND DATA.COD_DEST1 IN (${$Cust_Dim1.code})
-                  AND DATA.COD_DEST2 IN (${$Cust_Dim2.code})
-                  AND DATA.COD_DEST3 IN (${$Cust_Dim3.code})
-                  AND DATA.COD_DEST4 IN (${$Cust_Dim4.code})
-                  AND DATA.COD_DEST5 IN (${$Cust_Dim5.code})
-                  AND DATA.COD_CATEGORIA IN (${$Category.code})
+	  DATA.COD_SCENARIO = ${A2}
+	  AND DATA.COD_PERIODO = ${B2}
+	  AND DATA.COD_AZIENDA IN (${$Entity.code})
+	  AND DATA.COD_CONTO IN (${$Account.code})
+	  AND DATA.COD_DEST1 IN (${$Cust_Dim1.code})
+	  AND DATA.COD_DEST2 IN (${$Cust_Dim2.code})
+	  AND DATA.COD_DEST3 IN (${$Cust_Dim3.code})
+	  AND DATA.COD_DEST4 IN (${$Cust_Dim4.code})
+	  AND DATA.COD_DEST5 IN (${$Cust_Dim5.code})
+	  AND DATA.COD_CATEGORIA IN (${$Category.code})
   GROUP BY
     DATA.COD_CONTO,
     DATA.COD_AZIENDA,

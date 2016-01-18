@@ -164,12 +164,12 @@ FROM
             NULL AS CREDIT_ADJ,
             CASE
             WHEN NVL(C.ATTRIBUTO1, 'CV') = 'CV'
-                THEN D.IMPORTO * 1000
+                THEN D.IMPORTO2 * 1000
             ELSE NULL
             END AS CREDIT_VALUATION_ADJUSTMENT,
             CASE
             WHEN NVL(C.ATTRIBUTO1, 'CV') = 'UN'
-                THEN D.IMPORTO * 1000
+                THEN D.IMPORTO2 * 1000
             ELSE NULL
             END AS USQ_NOTIONAL,
             NULL AS POSITIVE_NEGATIVE,
@@ -179,7 +179,7 @@ FROM
             NULL AS REPLACEMENT_VALUE,
             CASE
                 WHEN NVL(C.ATTRIBUTO1, 'CV') = 'CE'
-                    THEN D.IMPORTO * 1000
+                    THEN D.IMPORTO2 * 1000
                 ELSE NULL
             END AS CREDIT_EQUIVALENT,
             NULL AS CPTY_WGHT,

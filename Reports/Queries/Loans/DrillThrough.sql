@@ -187,7 +187,7 @@ SELECT
   LOAN.DEFERRED_CODEBLOCK,
   LOAN.RESERVE_CODEBLOCK,
   LOAN.DESCRIPTION,
-	${CONCATENATE($Account.code, " (", PARENT($Account(HIERARCHY("RE"))).code, " - ", PARENT($Account(HIERARCHY("RE"))).desc, ": ", $Account.attribute4, " - ", $Account.attribute5, ")")} AS LINE_ITEM
+	${CONCATENATE($Account.attribute5, " [", $Account.attribute4, "]", " - ", PARENT($Account(HIERARCHY("RE"))).desc)} AS LINE_ITEM
 FROM
   RB_DRILL_INSTRUMENT DRILL
   INNER JOIN
@@ -222,7 +222,7 @@ SELECT
 	NULL AS INTERCOMPANY,
 	NULL AS CALL_CODE,
 	NULL AS CALL_CODE_DESC,
-	DATA.IMPORTO * 1000 AS BASE_EQUIVALENT,
+	DATA.IMPORTO2 * 1000 AS BASE_EQUIVALENT,
 	NULL AS PROD_GROUP_DESC,
 	NULL AS PROD_GROUP_TYPE_DESC,
 	NULL AS CUSTOMER_ID,
@@ -401,7 +401,7 @@ SELECT
   NULL AS DEFERRED_CODEBLOCK,
   NULL AS RESERVE_CODEBLOCK,
   NULL AS DESCRIPTION,
-	${CONCATENATE($Account.code, " (", PARENT($Account(HIERARCHY("RE"))).code, " - ", PARENT($Account(HIERARCHY("RE"))).desc, ": ", $Account.attribute4, " - ", $Account.attribute5, ")")} AS LINE_ITEM
+	${CONCATENATE($Account.attribute5, " [", $Account.attribute4, "]", " - ", PARENT($Account(HIERARCHY("RE"))).desc)} AS LINE_ITEM
 FROM
 	DATI_RETT_RIGA DATA
 	LEFT OUTER JOIN

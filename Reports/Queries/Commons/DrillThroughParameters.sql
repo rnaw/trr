@@ -1,12 +1,12 @@
 SELECT DISTINCT
-      CASE 
-			WHEN DATA.COD_PROSPETTO = 'GL' THEN 'GL_DT'
+      CASE
+            WHEN DATA.COD_PROSPETTO = 'GL' THEN 'GL_DT'     
             WHEN DATA.COD_PROSPETTO = 'CASH' THEN 'CASH_DT'
             WHEN DATA.COD_PROSPETTO = 'LOAN' THEN 'LOAN_DT'
-			WHEN DATA.COD_PROSPETTO = 'SECURITIES' THEN 'SECURITIES_DT'
-			WHEN DATA.COD_PROSPETTO = 'OFF_BS' THEN 'OBS_DT'
-			WHEN DATA.COD_PROSPETTO = 'DERIVATIVES' THEN 'DER_DT'
-			WHEN DATA.COD_PROSPETTO = 'BORROWINGS' THEN 'BOR_DT'
+            WHEN DATA.COD_PROSPETTO = 'SECURITIES' THEN 'SECURITIES_DT'
+            WHEN DATA.COD_PROSPETTO = 'OFF_BS' THEN 'OBS_DT'
+            WHEN DATA.COD_PROSPETTO = 'DERIVATIVES' THEN 'DER_DT'
+            WHEN DATA.COD_PROSPETTO = 'BORROWINGS' THEN 'BOR_DT'
             ELSE DATA.COD_PROSPETTO || '_DT'
       END AS REPORT_CODE,
       ${"$SCE_P=(" + IF(CONCATENATE($Scenario.code) = "", "NA", CONCATENATE($Scenario.code)) + ");" +
@@ -31,10 +31,10 @@ SELECT DISTINCT
             FORM_DATI DATA
       ON
             DRILL.OID_FORM_DATI = DATA.OID_FORM_DATI
-	  INNER JOIN
-			CONTO C
-	  ON
-			DRILL.COD_CONTO = C.COD_CONTO
+      INNER JOIN
+            CONTO C
+      ON
+            DRILL.COD_CONTO = C.COD_CONTO
       WHERE
             DRILL.COD_SCENARIO IN (${$Scenario.code}) 
             AND DRILL.COD_PERIODO IN (${$Period.code})
@@ -46,17 +46,17 @@ SELECT DISTINCT
             AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
             AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
             AND DRILL.COD_CATEGORIA IN (${$Category.code})
-			AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
+            AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
 UNION ALL
 SELECT DISTINCT
       CASE
-			WHEN DATA.COD_PROSPETTO = 'GL' THEN 'GL_DT_VAR'
+            WHEN DATA.COD_PROSPETTO = 'GL' THEN 'GL_DT_VAR'
             WHEN DATA.COD_PROSPETTO = 'CASH' THEN 'CASH_DT_VAR'
             WHEN DATA.COD_PROSPETTO = 'LOAN' THEN 'LOAN_DT_VAR'
-			WHEN DATA.COD_PROSPETTO = 'SECURITIES' THEN 'SEC_DT_VAR'
-			WHEN DATA.COD_PROSPETTO = 'OFF_BS' THEN 'OBS_DT_VAR'
-			WHEN DATA.COD_PROSPETTO = 'DERIVATIVES' THEN 'DER_DT_VAR'
-			WHEN DATA.COD_PROSPETTO = 'BORROWINGS' THEN 'BOR_DT_VAR'
+            WHEN DATA.COD_PROSPETTO = 'SECURITIES' THEN 'SEC_DT_VAR'
+            WHEN DATA.COD_PROSPETTO = 'OFF_BS' THEN 'OBS_DT_VAR'
+            WHEN DATA.COD_PROSPETTO = 'DERIVATIVES' THEN 'DER_DT_VAR'
+            WHEN DATA.COD_PROSPETTO = 'BORROWINGS' THEN 'BOR_DT_VAR'
             ELSE DATA.COD_PROSPETTO || '_DT_VAR'
       END AS REPORT_CODE,
       ${"PS=(" + IF(CONCATENATE(Parameter("PS").$Scenario.code) = "", "NA", CONCATENATE(Parameter("PS").$Scenario.code)) + ");" +
@@ -83,10 +83,10 @@ SELECT DISTINCT
             FORM_DATI DATA
       ON
             DRILL.OID_FORM_DATI = DATA.OID_FORM_DATI
-	  INNER JOIN
-			CONTO C
-	  ON
-			DRILL.COD_CONTO = C.COD_CONTO
+      INNER JOIN
+            CONTO C
+      ON
+            DRILL.COD_CONTO = C.COD_CONTO
       WHERE
             (SELECT COUNT(*) FROM PERIODO WHERE COD_PERIODO IN (${$Period.code})) = 0
             AND (
@@ -105,7 +105,7 @@ SELECT DISTINCT
             AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
             AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
             AND DRILL.COD_CATEGORIA IN (${$Category.code})
-			AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'			
+            AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'            
 UNION ALL
 SELECT DISTINCT
       'GL_DT' AS REPORT_CODE,
@@ -127,10 +127,10 @@ SELECT DISTINCT
       "$CAUS_P=(" + IF(CONCATENATE($Causal.code) = "", "$EB", CONCATENATE($Causal.code)) + ")"} AS PROMPT_FILTERS
       FROM
             DATI_RETT_RIGA DRILL
-	  INNER JOIN
-			CONTO C
-	  ON
-			DRILL.COD_CONTO = C.COD_CONTO
+      INNER JOIN
+            CONTO C
+      ON
+            DRILL.COD_CONTO = C.COD_CONTO
       WHERE
             DRILL.COD_SCENARIO IN (${$Scenario.code}) 
             AND DRILL.COD_PERIODO IN (${$Period.code})
@@ -142,9 +142,9 @@ SELECT DISTINCT
             AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
             AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
             AND DRILL.COD_CATEGORIA IN (${$Category.code})
-			AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
+        AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
 UNION ALL
-SELECT DISTINCT
+SELECT 
       'NOT_DRILLABLE' AS REPORT_CODE,
       ${"$SCE_P=(" + IF(CONCATENATE($Scenario.code) = "", "NA", CONCATENATE($Scenario.code)) + ");" +
       "$PER_P=(" + IF(CONCATENATE($Period.code) = "", "NA", CONCATENATE($Period.code)) + ");" +
@@ -163,6 +163,6 @@ SELECT DISTINCT
       "$TIP_P=(" + IF(CONCATENATE($AmountType.code) = "", "TIP_O", CONCATENATE($AmountType.code)) + ");" +
       "$CAUS_P=(" + IF(CONCATENATE($Causal.code) = "", "$EB", CONCATENATE($Causal.code)) + ")"} AS PROMPT_FILTERS
 FROM
-	DUAL
+    DUAL
 WHERE
-	EXISTS (SELECT 1 FROM CONTO WHERE COD_CONTO = ${$Account.code} AND NVL(ATTRIBUTO2, 'Y') = 'N')
+    EXISTS (SELECT 1 FROM CONTO WHERE COD_CONTO = ${$Account.code} AND NVL(ATTRIBUTO2, 'Y') = 'N')
