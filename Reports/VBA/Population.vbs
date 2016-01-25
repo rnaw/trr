@@ -37,7 +37,11 @@ Private Sub DoSubtotals()
             Case "OREO"
                 totalListColumns = Array(28, 29, 31, 32, 33, 34, 36, 38, 39, 41, 42, 47)
                 Call subTotalize(Worksheets(i), Worksheets(i).range("B5:CN5"), 91, totalListColumns)
-            
+                
+            Case "DEPOSITS"
+                totalListColumns = Array(20, 27, 30, 31, 104, 105, 106, 115, 116, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 175)
+                Call subTotalize(Worksheets(i), Worksheets(i).range("B5:GT5"), 201, totalListColumns)
+                
             Case "GL"
                 totalListColumns = Array(21, 23)
                 Call subTotalize(Worksheets(i), Worksheets(i).range("B5:Y5"), 24, totalListColumns)
@@ -79,3 +83,5 @@ Public Sub TGK_AfterRun(reportCode As String, processCode As String)
     Call DoSubtotals
 
 End Sub
+
+

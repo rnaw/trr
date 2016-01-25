@@ -1,7 +1,6 @@
+--------------------------------------------------------
+--  DDL for Table _LOCK
+--------------------------------------------------------
 CREATE TABLE "_LOCK" (
-    OID_LOCK VARCHAR2(36),
-    USERUPD VARCHAR2(30),
-    DATEUPD DATE,
-    PROVENIENZA VARCHAR2(80),
-    CONSTRAINT RB_PK_LOCK PRIMARY KEY (OID_LOCK)
-  )
+   "ID" NUMBER(*,0)
+)

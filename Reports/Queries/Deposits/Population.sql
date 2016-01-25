@@ -474,7 +474,6 @@ FROM
             B.COD_SCENARIO,
             B.COD_PERIODO,
             CAST(B.IMPORTO_1 AS VARCHAR(255)) AS RB_ROWID,
-            DEP.MONTH_END_DATE,
             DEP."MONTH_END_DATE",
             DEP."BANK_NUMBER",
             DEP."ACCOUNT_DEPOSIT_CATEGORY_CODE",
@@ -733,7 +732,7 @@ FROM
             CASE
                 WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'BE'
                     THEN NULL
-                ELSE D.IMPORTO2 * 1000
+                ELSE D.IMPORTO * 1000
             END AS ACCOUNT_LEDGER_BALANCE,
             NULL AS "X_2",
             NULL AS "X_3",
@@ -821,7 +820,7 @@ FROM
             NULL AS "UMD_1",
             NULL AS "UMD_2",
             NULL AS "UMD_3",
-            D.COD_VALUTA2 AS CURRENCY_CODE,
+            D.COD_VALUTA_ORIGINARIA AS CURRENCY_CODE,
             NULL AS "ORIGINATION_DATE",
             NULL AS "REMAINING_MATURITY_DAYS",
             NULL AS "MATURITY_BUCKETS",
@@ -843,7 +842,7 @@ FROM
             CASE
                 WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'ALB'
                     THEN NULL
-                ELSE D.IMPORTO2 * 1000
+                ELSE D.IMPORTO * 1000
             END AS BASE_EQUIVALENT,
             NULL AS "PRINCIPAL_ORIG_CCY",
             NULL AS "DISCOUNT_GIVEN_ORIG_CCY",
@@ -892,7 +891,7 @@ FROM
                 ELSE NULL
             END AS DEPTID,
             D.COD_DEST4 AS CUST_CLASS,
-            D.COD_AZI_CTP AS AFFILIATE,
+            NULL AS AFFILIATE,
             NULL AS "DISC_GIVEN_CALL_CODE_CODEBLOCK",
             NULL AS "TRANS_ACCT_CALL_CODE_CODEBLK",
             NULL AS "UMD_7",
@@ -997,7 +996,7 @@ FROM
             CASE
                 WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'BE'
                     THEN NULL
-                ELSE D.IMPORTO2 * 1000
+                ELSE D.IMPORTO * 1000
             END AS ACCOUNT_LEDGER_BALANCE,
             NULL AS "X_2",
             NULL AS "X_3",
@@ -1085,7 +1084,7 @@ FROM
             NULL AS "UMD_1",
             NULL AS "UMD_2",
             NULL AS "UMD_3",
-            D.COD_VALUTA2 AS CURRENCY_CODE,
+            D.COD_VALUTA_ORIGINARIA AS CURRENCY_CODE,
             NULL AS "ORIGINATION_DATE",
             NULL AS "REMAINING_MATURITY_DAYS",
             NULL AS "MATURITY_BUCKETS",
@@ -1107,7 +1106,7 @@ FROM
             CASE
                 WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'ALB'
                     THEN NULL
-                ELSE D.IMPORTO2 * 1000
+                ELSE D.IMPORTO * 1000
             END AS BASE_EQUIVALENT,
             NULL AS "PRINCIPAL_ORIG_CCY",
             NULL AS "DISCOUNT_GIVEN_ORIG_CCY",
@@ -1156,7 +1155,7 @@ FROM
                 ELSE NULL
             END AS DEPTID,
             D.COD_DEST4 AS CUST_CLASS,
-            D.COD_AZI_CTP AS AFFILIATE,
+            NULL AS AFFILIATE,
             NULL AS "DISC_GIVEN_CALL_CODE_CODEBLOCK",
             NULL AS "TRANS_ACCT_CALL_CODE_CODEBLK",
             NULL AS "UMD_7",
