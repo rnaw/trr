@@ -1,0 +1,70 @@
+
+CREATE OR REPLACE FORCE VIEW "RB_V_DEST5" (
+                                "COD_DEST5",
+                                "DESC_DEST50",
+                                "DESC_DEST51",
+                                "DESC_DEST52",
+                                "DESC_DEST53",
+                                "ATTRIBUTO1",
+                                "ATTRIBUTO2",
+                                "ATTRIBUTO3",
+                                "ATTRIBUTO4",
+                                "ATTRIBUTO5",
+                                "PROVENIENZA",
+                                "USERUPD",
+                                "DATEUPD",
+                                "COD_CTP_REGOLA",
+                                "LINK_DOCUMENTO",
+                                "COD_UDM_BASE",
+                                "COD_UDM_STOCCAGGIO",
+                                "COD_UDM_STOCCAGGIO_ALTERN",
+                                "DATA_INIZIO",
+                                "DATA_FINE",
+                                "COD_AZIENDA") AS
+SELECT RB_F_TGK_SANITIZE_CODE(CALL_CODE) AS "COD_DEST5",
+       COALESCE(CALL_CODE, RB_F_TGK_SANITIZE_CODE(CALL_CODE)) AS "DESC_DEST50",
+       COALESCE(CALL_CODE, RB_F_TGK_SANITIZE_CODE(CALL_CODE)) AS "DESC_DEST51",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "DESC_DEST52",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "DESC_DEST53",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO1",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO2",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO3",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO4",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO5",
+       CAST(NULL AS VARCHAR2(80BYTE)) AS "PROVENIENZA",
+       CAST(NULL AS VARCHAR2(30BYTE)) AS "USERUPD",
+       CAST(NULL AS DATE) AS "DATEUPD",
+       CAST(NULL AS VARCHAR2(5BYTE)) AS "COD_CTP_REGOLA",
+       CAST(NULL AS VARCHAR2(2000BYTE)) AS "LINK_DOCUMENTO",
+       CAST(NULL AS VARCHAR2(70BYTE)) AS "COD_UDM_BASE",
+       CAST(NULL AS VARCHAR2(70BYTE)) AS "COD_UDM_STOCCAGGIO",
+       CAST(NULL AS VARCHAR2(70BYTE)) AS "COD_UDM_STOCCAGGIO_ALTERN",
+       CAST(NULL AS DATE) AS "DATA_INIZIO",
+       CAST(NULL AS DATE) AS "DATA_FINE",
+       RB_F_TGK_SANITIZE_CODE(BUSINESS_UNIT) AS COD_AZIENDA
+FROM
+  ( SELECT CALL_CODE,
+           BUSINESS_UNIT
+   FROM RB_MV_HST_CASH_01_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_LOAN_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_SECURITY_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_OFF_BS_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_DER_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_BOR_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_OREO_CALL_CODE
+   UNION SELECT CALL_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_DEPOSITS_CALL_CODE ) D
+;
