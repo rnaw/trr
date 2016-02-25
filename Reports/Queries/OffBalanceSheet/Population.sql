@@ -120,7 +120,11 @@ FROM
             NULL AS CURRENCY_CODE,
             NULL AS FOREIGN_AMOUNT,
             NULL AS CURRENCY_USQ,
-            D.IMPORTO2 * 1000 AS BASE_EQUIVALENT,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'BE'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS BASE_EQUIVALENT,
             NULL AS ORIGINATION_DATE,
             NULL AS MATURITY_DATE,
             NULL AS REMAINING_MATURITY_DAYS,
@@ -131,9 +135,17 @@ FROM
             NULL AS FOREIGN_DOMESTIC,
             NULL AS CANCELLABLE_Y_N,
             NULL AS MATURITY_BUCKETS,
-            NULL AS SECURITIZATION_EXPO,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'SEC'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS SECURITIZATION_EXPO,
             NULL AS CREDIT_CONVERSION_FACTOR,
-            NULL AS CREDIT_EQUIVALENT_AMT,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'CE'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS CREDIT_EQUIVALENT_AMT,
             NULL AS RISK_COUNTRY,
             NULL AS RISK_COUNTRY_CODE,
             NULL AS RISK_WEIGHTED_CATEGORY,
@@ -241,6 +253,10 @@ FROM
             ON
             D.COD_SCENARIO = SCEN.COD_SCENARIO
             AND D.COD_PERIODO = SCEN.COD_PERIODO
+            LEFT OUTER JOIN
+            CONTO C
+            ON
+              D.COD_CONTO = C.COD_CONTO
         WHERE
             D.COD_SCENARIO IN (${$Scenario.code})
             AND D.COD_PERIODO IN (${$Period.code})
@@ -553,7 +569,11 @@ FROM
             NULL AS CURRENCY_CODE,
             NULL AS FOREIGN_AMOUNT,
             NULL AS CURRENCY_USQ,
-            D.IMPORTO * 1000 AS BASE_EQUIVALENT,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'BE'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS BASE_EQUIVALENT,
             NULL AS ORIGINATION_DATE,
             NULL AS MATURITY_DATE,
             NULL AS REMAINING_MATURITY_DAYS,
@@ -564,9 +584,17 @@ FROM
             NULL AS FOREIGN_DOMESTIC,
             NULL AS CANCELLABLE_Y_N,
             NULL AS MATURITY_BUCKETS,
-            NULL AS SECURITIZATION_EXPO,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'SEC'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS SECURITIZATION_EXPO,
             NULL AS CREDIT_CONVERSION_FACTOR,
-            NULL AS CREDIT_EQUIVALENT_AMT,
+           CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'BE') = 'CE'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS CREDIT_EQUIVALENT_AMT,
             NULL AS RISK_COUNTRY,
             NULL AS RISK_COUNTRY_CODE,
             NULL AS RISK_WEIGHTED_CATEGORY,
@@ -670,10 +698,14 @@ FROM
             ON
             D.COD_SCENARIO = SCEN.COD_SCENARIO
             AND D.COD_PERIODO = SCEN.COD_PERIODO
+            LEFT OUTER JOIN
+            CONTO C
+            ON
+              D.COD_CONTO = C.COD_CONTO
         WHERE
             D.COD_SCENARIO IN (${$Scenario.code})
             AND D.COD_PERIODO IN (${$Period.code})
-      AND D.COD_AZIENDA IN (${$Entity.code})
+            AND D.COD_AZIENDA IN (${$Entity.code})
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 3) = ${A1}
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 4) = ${B1}
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 7) IS NULL

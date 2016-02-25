@@ -133,13 +133,29 @@ FROM
             D.COD_DEST5 AS CALL_CODE,
             NULL AS CALL_CODE_DESC,
             NULL AS PRODUCT_GROUP_DESC,
-            NULL AS AMORTIZED_COST,
-            NULL AS FAIR_VALUE,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'AC'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS AMORTIZED_COST,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'FV'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS FAIR_VALUE,
             NULL AS PRICE,
-            D.IMPORTO2 * 1000 AS PRINCIPAL_GL_US_GAAP_BASE_EQ,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'PGUBE'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS PRINCIPAL_GL_US_GAAP_BASE_EQ,
             NULL AS DISCOUNT_GL_US_GAAP_BASE_EQ,
             NULL AS PREMIUM_GL_US_GAAP_BASE_EQ,
-            NULL AS UNRLZED_PL_GL_US_GAAP_BASE_EQ,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'UNRZ'
+                      THEN D.IMPORTO2 * 1000
+                  ELSE NULL
+            END AS UNRLZED_PL_GL_US_GAAP_BASE_EQ,
             NULL AS LTD_IMPAIRMENT_US_GAAP_BASE_EQ,
             D.NOTE AS SOURCE,
             NULL AS IBF_ONLY_RAL_COLUMN_B_YN,
@@ -264,11 +280,15 @@ FROM
             AZIENDA ACTP
             ON
                 D.COD_AZI_CTP = ACTP.COD_AZIENDA
-LEFT OUTER JOIN
-SCENARIO_PERIODO SCEN
-ON
-D.COD_SCENARIO = SCEN.COD_SCENARIO
-AND D.COD_PERIODO = SCEN.COD_PERIODO
+            LEFT OUTER JOIN
+            SCENARIO_PERIODO SCEN
+            ON
+              D.COD_SCENARIO = SCEN.COD_SCENARIO
+              AND D.COD_PERIODO = SCEN.COD_PERIODO
+            LEFT OUTER JOIN
+            CONTO C
+            ON
+              D.COD_CONTO = C.COD_CONTO
         WHERE
             D.COD_SCENARIO IN (${$Scenario.code})
             AND D.COD_PERIODO IN (${$Period.code})
@@ -621,13 +641,29 @@ UNION ALL
             D.COD_DEST5 AS CALL_CODE,
             NULL AS CALL_CODE_DESC,
             NULL AS PRODUCT_GROUP_DESC,
-            NULL AS AMORTIZED_COST,
-            NULL AS FAIR_VALUE,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'AC'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS AMORTIZED_COST,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'FV'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS FAIR_VALUE,
             NULL AS PRICE,
-            D.IMPORTO * 1000 AS PRINCIPAL_GL_US_GAAP_BASE_EQ,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'PGUBE'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS PRINCIPAL_GL_US_GAAP_BASE_EQ,
             NULL AS DISCOUNT_GL_US_GAAP_BASE_EQ,
             NULL AS PREMIUM_GL_US_GAAP_BASE_EQ,
-            NULL AS UNRLZED_PL_GL_US_GAAP_BASE_EQ,
+            CASE
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'UNRZ'
+                      THEN D.IMPORTO * 1000
+                  ELSE NULL
+            END AS UNRLZED_PL_GL_US_GAAP_BASE_EQ,
             NULL AS LTD_IMPAIRMENT_US_GAAP_BASE_EQ,
             D.NOTE AS SOURCE,
             NULL AS IBF_ONLY_RAL_COLUMN_B_YN,
@@ -748,24 +784,28 @@ UNION ALL
             AZIENDA A
             ON
                 D.COD_AZIENDA = A.COD_AZIENDA
+            LEFT OUTER JOIN
+            CONTO C
+            ON
+              D.COD_CONTO = C.COD_CONTO
         WHERE
             D.COD_SCENARIO IN (${$Scenario.code})
             AND D.COD_PERIODO IN (${$Period.code})
-      AND D.COD_AZIENDA IN (${$Entity.code})
+            AND D.COD_AZIENDA IN (${$Entity.code})
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 3) = ${A1}
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 4) = ${B1}
             AND RB_F_TGK_GET_ACCOUNT_NODE(D.COD_CONTO, 'RE', 7) IS NULL
             AND D.COD_CATEGORIA = 'ORI_REP'
             AND D.PROVENIENZA NOT LIKE REPLACE(
-CASE
-WHEN
-${B1} = 'RAL'
-THEN
-'MAP_REP_' || ${A1} || '_' || SUBSTR(${B1},1,2) || '_%'
-ELSE
-'MAP_REP_' || ${A1} || '_' || ${B1} || '_%'
-END
-, '-', '_')
+            CASE
+            WHEN
+            ${B1} = 'RAL'
+            THEN
+            'MAP_REP_' || ${A1} || '_' || SUBSTR(${B1},1,2) || '_%'
+            ELSE
+            'MAP_REP_' || ${A1} || '_' || ${B1} || '_%'
+            END
+            , '-', '_')
             AND D.PROVENIENZA <> 'PROC_BALANCING'
     ) A
     LEFT OUTER JOIN
