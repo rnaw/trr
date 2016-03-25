@@ -163,24 +163,28 @@ FROM
             NULL AS MANUAL_ADJUSTMENTS,
             NULL AS CREDIT_ADJ,
             CASE
-            WHEN NVL(C.ATTRIBUTO1, 'CV') = 'CV'
+              WHEN COALESCE(C.ATTRIBUTO1, 'CVA') = 'CVA'
                 THEN D.IMPORTO2 * 1000
-            ELSE NULL
+              ELSE NULL
             END AS CREDIT_VALUATION_ADJUSTMENT,
             CASE
-            WHEN NVL(C.ATTRIBUTO1, 'CV') = 'UN'
+              WHEN COALESCE(C.ATTRIBUTO1, 'CVA') = 'UN'
                 THEN D.IMPORTO2 * 1000
-            ELSE NULL
+              ELSE NULL
             END AS USQ_NOTIONAL,
             NULL AS POSITIVE_NEGATIVE,
             NULL AS BUY_SELL_INDICATOR,
             NULL AS MATURITY_PCT_WEIGHT,
             NULL AS ADD_ON,
-            NULL AS REPLACEMENT_VALUE,
             CASE
-                WHEN NVL(C.ATTRIBUTO1, 'CV') = 'CE'
-                    THEN D.IMPORTO2 * 1000
-                ELSE NULL
+              WHEN COALESCE(C.ATTRIBUTO1, 'CVA') = 'RV'
+                THEN D.IMPORTO2 * 1000
+              ELSE NULL
+            END AS REPLACEMENT_VALUE,
+            CASE
+              WHEN COALESCE(C.ATTRIBUTO1, 'CVA') = 'CE'
+                THEN D.IMPORTO2 * 1000
+              ELSE NULL
             END AS CREDIT_EQUIVALENT,
             NULL AS CPTY_WGHT,
             NULL AS AMT_BOUGHT,

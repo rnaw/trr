@@ -642,12 +642,12 @@ UNION ALL
             NULL AS CALL_CODE_DESC,
             NULL AS PRODUCT_GROUP_DESC,
             CASE
-                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'AC'
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') IN ('AC', 'FV_AC')
                       THEN D.IMPORTO * 1000
                   ELSE NULL
             END AS AMORTIZED_COST,
             CASE
-                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') = 'FV'
+                  WHEN COALESCE(C.ATTRIBUTO1, 'PGUBE') IN ('FV', 'FV_AC')
                       THEN D.IMPORTO * 1000
                   ELSE NULL
             END AS FAIR_VALUE,
