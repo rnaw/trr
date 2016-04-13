@@ -1154,7 +1154,7 @@ FROM
     INSTRUMENT,
     INTERCOMPANY,
     CONSOL_NODE,
-    BUSINESS_UNIT,
+    H.BUSINESS_UNIT,
     GL_KEY_CODE,
     GL_KEY_CODE_DESC,
     CALL_CODE,
@@ -1262,16 +1262,38 @@ FROM
     INNER JOIN
     (
       SELECT DISTINCT
-        DATA_1 AS MONTH_END_DATE
+        DATA_1 AS MONTH_END_DATE,
+        COD_AZIENDA AS BUSINESS_UNIT
       FROM
         FORM_DATI
       WHERE
         COD_SCENARIO = ${A1}
         AND COD_PERIODO = ${B1}
         AND COD_PROSPETTO = 'SECURITIES'
+        AND COD_AZIENDA IN (
+              SELECT
+                COD_AZIENDA
+              FROM
+                UTENTE_AZIENDA
+              WHERE
+                FLAG_INSERIMENTO_DATI = 1
+                AND COD_AZIENDA_GERARCHIA = (SELECT COD_AZIENDA_GERARCHIA FROM RACCOLTA WHERE COD_RACCOLTA = 'ACT')
+                AND COD_UTENTE = ${USER.CODE}
+              UNION
+              SELECT
+                A.COD_AZIENDA
+              FROM
+                UTENTE U,
+                AZIENDA_GERARCHIA_ABBI A
+              WHERE
+                U.TIPO_LIM_AZIENDA = 'X'
+                AND A.COD_AZIENDA_GERARCHIA = (SELECT COD_AZIENDA_GERARCHIA FROM RACCOLTA WHERE COD_RACCOLTA = 'ACT')
+                AND U.COD_UTENTE = ${USER.CODE}
+          )
     ) F
    ON
      H.MONTH_END_DATE = F.MONTH_END_DATE
+     AND RB_F_TGK_SANITIZE_CODE(H.BUSINESS_UNIT) = F.BUSINESS_UNIT
   ) A
 FULL OUTER JOIN
 (
@@ -1282,7 +1304,7 @@ FULL OUTER JOIN
       ORDER BY
         INTERCOMPANY,
         CONSOL_NODE,
-        BUSINESS_UNIT,
+        H.BUSINESS_UNIT,
         GL_KEY_CODE,
         GL_KEY_CODE_DESC,
         CALL_CODE,
@@ -1391,7 +1413,7 @@ FULL OUTER JOIN
     INSTRUMENT,
     INTERCOMPANY,
     CONSOL_NODE,
-    BUSINESS_UNIT,
+    H.BUSINESS_UNIT,
     GL_KEY_CODE,
     GL_KEY_CODE_DESC,
     CALL_CODE,
@@ -1499,16 +1521,38 @@ FULL OUTER JOIN
     INNER JOIN
     (
       SELECT DISTINCT
-        DATA_1 AS MONTH_END_DATE
+        DATA_1 AS MONTH_END_DATE,
+        COD_AZIENDA AS BUSINESS_UNIT
      FROM
         FORM_DATI
       WHERE
         COD_SCENARIO = ${A2}
         AND COD_PERIODO = ${B2}
         AND COD_PROSPETTO = 'SECURITIES'
+        AND COD_AZIENDA IN (
+              SELECT
+                COD_AZIENDA
+              FROM
+                UTENTE_AZIENDA
+              WHERE
+                FLAG_INSERIMENTO_DATI = 1
+                AND COD_AZIENDA_GERARCHIA = (SELECT COD_AZIENDA_GERARCHIA FROM RACCOLTA WHERE COD_RACCOLTA = 'ACT')
+                AND COD_UTENTE = ${USER.CODE}
+              UNION
+              SELECT
+                A.COD_AZIENDA
+              FROM
+                UTENTE U,
+                AZIENDA_GERARCHIA_ABBI A
+              WHERE
+                U.TIPO_LIM_AZIENDA = 'X'
+                AND A.COD_AZIENDA_GERARCHIA = (SELECT COD_AZIENDA_GERARCHIA FROM RACCOLTA WHERE COD_RACCOLTA = 'ACT')
+                AND U.COD_UTENTE = ${USER.CODE}
+          )
     ) F
    ON
      H.MONTH_END_DATE = F.MONTH_END_DATE
+     AND RB_F_TGK_SANITIZE_CODE(H.BUSINESS_UNIT) = F.BUSINESS_UNIT
 ) P
 ON
   A.ROW_ID = P.ROW_ID

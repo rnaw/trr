@@ -133,6 +133,26 @@ SELECT DISTINCT
             CONTO C
       ON
             DRILL.COD_CONTO = C.COD_CONTO
+      LEFT OUTER JOIN
+        (
+          SELECT DISTINCT
+            COD_CONTO
+          FROM
+            RB_DRILL_INSTRUMENT
+          WHERE
+            COD_SCENARIO IN (${$Scenario.code}) 
+            AND COD_PERIODO IN (${$Period.code})
+            AND COD_AZIENDA IN (${$Entity.code})
+            AND COD_CONTO IN (${$Account.code})
+            AND COD_DEST1 IN (${$Cust_Dim1.code})
+            AND COD_DEST2 IN (${$Cust_Dim2.code})
+            AND COD_DEST3 IN (${$Cust_Dim3.code})
+            AND COD_DEST4 IN (${$Cust_Dim4.code})
+            AND COD_DEST5 IN (${$Cust_Dim5.code})
+            AND COD_CATEGORIA IN (${$Category.code})
+        ) D
+      ON
+        C.COD_CONTO = D.COD_CONTO
       WHERE
             DRILL.COD_SCENARIO IN (${$Scenario.code}) 
             AND DRILL.COD_PERIODO IN (${$Period.code})
@@ -145,6 +165,7 @@ SELECT DISTINCT
             AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
             AND DRILL.COD_CATEGORIA IN (${$Category.code})
         AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
+        AND D.COD_CONTO IS NULL
 UNION ALL
 SELECT 
       'NOT_DRILLABLE' AS REPORT_CODE,

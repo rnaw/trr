@@ -10,8 +10,13 @@ Sub Activator(ByVal queue As Integer)
     
     If queue = currentQueue Then
         If Trim(reportCode) <> "" Then
+            Dim instruments As Range, cell As Range
             currentQueue = 0
-            Call DrillThrough(reportCode, promptFilters)
+            Set instruments = Range(ThisWorkbook.Sheets("_DrillThroughParameters").Range("B5"), ThisWorkbook.Sheets("_DrillThroughParameters").Range("B5").End(xlDown))
+            For Each cell In instruments
+                reportCode = cell.Value
+                Call DrillThrough(reportCode, promptFilters)
+            Next cell
         Else
             Application.OnTime Now() + waitTime, "'Activator " & queue & "'"
         End If
