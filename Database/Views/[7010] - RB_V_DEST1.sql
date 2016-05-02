@@ -1,0 +1,64 @@
+
+CREATE OR REPLACE FORCE VIEW "RB_V_DEST1" (
+                                "COD_DEST1",
+                                "DESC_DEST10",
+                                "DESC_DEST11",
+                                "DESC_DEST12",
+                                "DESC_DEST13",
+                                "ATTRIBUTO1",
+                                "ATTRIBUTO2",
+                                "ATTRIBUTO3",
+                                "ATTRIBUTO4",
+                                "ATTRIBUTO5",
+                                "PROVENIENZA",
+                                "USERUPD",
+                                "DATEUPD",
+                                "COD_CTP_REGOLA",
+                                "LINK_DOCUMENTO",
+                                "DATA_INIZIO",
+                                "DATA_FINE",
+                                "COD_AZIENDA") AS
+SELECT RB_F_TGK_SANITIZE_CODE(GL_KEY_CODE) AS "COD_DEST1",
+       COALESCE(GL_KEY_CODE, RB_F_TGK_SANITIZE_CODE(GL_KEY_CODE)) AS "DESC_DEST10",
+       COALESCE(GL_KEY_CODE, RB_F_TGK_SANITIZE_CODE(GL_KEY_CODE)) AS "DESC_DEST11",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "DESC_DEST12",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "DESC_DEST13",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO1",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO2",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO3",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO4",
+       CAST(NULL AS VARCHAR2(330BYTE)) AS "ATTRIBUTO5",
+       CAST(NULL AS VARCHAR2(80BYTE)) AS "PROVENIENZA",
+       CAST(NULL AS VARCHAR2(30BYTE)) AS "USERUPD",
+       CAST(NULL AS DATE) AS "DATEUPD",
+       CAST(NULL AS VARCHAR2(5BYTE)) AS "COD_CTP_REGOLA",
+       CAST(NULL AS VARCHAR2(2000BYTE)) AS "LINK_DOCUMENTO",
+       CAST(NULL AS DATE) AS "DATA_INIZIO",
+       CAST(NULL AS DATE) AS "DATA_FINE",
+       RB_F_TGK_SANITIZE_CODE(BUSINESS_UNIT) AS COD_AZIENDA
+FROM
+  ( SELECT GL_KEY_CODE,
+           BUSINESS_UNIT
+   FROM RB_MV_HST_CASH_01_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_LOAN_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_SECURITY_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_OFF_BS_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_DER_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_BOR_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_OREO_GL_KEY_CODE
+   UNION SELECT GL_KEY_CODE,
+                BUSINESS_UNIT
+   FROM RB_MV_HST_DEPOSITS_GL_KEY_CODE ) D
+;
