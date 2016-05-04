@@ -128,6 +128,47 @@ SELECT DISTINCT
       "$TIP_P=(" + IF(CONCATENATE($AmountType.code) = "", "TIP_O", CONCATENATE($AmountType.code)) + ");" +
       "$CAUS_P=(" + IF(CONCATENATE($Causal.code) = "", "$EB", CONCATENATE($Causal.code)) + ")"} AS PROMPT_FILTERS
       FROM
+            RB_DRILL_INSTRUMENT DRILL
+      INNER JOIN
+            DATI_RETT_RIGA DATA
+      ON
+            DRILL.OID_FORM_DATI = DATA.OID_DATI_RETT_RIGA
+      INNER JOIN
+            CONTO C
+      ON
+            DRILL.COD_CONTO = C.COD_CONTO
+      WHERE
+            DRILL.COD_SCENARIO IN (${$Scenario.code}) 
+            AND DRILL.COD_PERIODO IN (${$Period.code})
+            AND DRILL.COD_AZIENDA IN (${$Entity.code})
+            AND DRILL.COD_CONTO IN (${$Account.code})
+            AND DRILL.COD_DEST1 IN (${$Cust_Dim1.code})
+            AND DRILL.COD_DEST2 IN (${$Cust_Dim2.code})
+            AND DRILL.COD_DEST3 IN (${$Cust_Dim3.code})
+            AND DRILL.COD_DEST4 IN (${$Cust_Dim4.code})
+            AND DRILL.COD_DEST5 IN (${$Cust_Dim5.code})
+            AND DRILL.COD_CATEGORIA IN (${$Category.code})
+            AND NVL(C.ATTRIBUTO2, 'Y') = 'Y'
+UNION ALL
+SELECT DISTINCT
+      'GL_DT' AS REPORT_CODE,
+      ${"$SCE_P=(" + IF(CONCATENATE($Scenario.code) = "", "NA", CONCATENATE($Scenario.code)) + ");" +
+      "$PER_P=(" + IF(CONCATENATE($Period.code) = "", "NA", CONCATENATE($Period.code)) + ");" +
+      "$AZI_P=(" + IF(CONCATENATE($Entity.code) = "", "NA", CONCATENATE($Entity.code)) + ");" +
+      "$VOC_RE_P=(" + IF(CONCATENATE($Account.code) = "", "NA", CONCATENATE($Account.code)) + ");" +
+      "$DEST1_P=(" + IF(CONCATENATE($Cust_Dim1.code) = "", "NA", CONCATENATE($Cust_Dim1.code)) + ");" +
+      "$DEST2_P=(" + IF(CONCATENATE($Cust_Dim2.code) = "", "NA", CONCATENATE($Cust_Dim2.code)) + ");" +
+      "$DEST3_P=(" + IF(CONCATENATE($Cust_Dim3.code) = "", "NA", CONCATENATE($Cust_Dim3.code)) + ");" +
+      "$DEST4_P=(" + IF(CONCATENATE($Cust_Dim4.code) = "", "NA", CONCATENATE($Cust_Dim4.code)) + ");" +
+      "$DEST5_P=(" + IF(CONCATENATE($Cust_Dim5.code) = "", "NA", CONCATENATE($Cust_Dim5.code)) + ");" +
+      "$CAT_P=(" + IF(CONCATENATE($Category.code) = "", "NA", CONCATENATE($Category.code)) + ");" +
+      "$ACP_P=(" + IF(CONCATENATE($ICEntity.code) = "", "NA", CONCATENATE($ICEntity.code)) + ");" +
+      "$DCP_P=(" + IF(CONCATENATE($ICCust_Dim.code) = "", "NA", CONCATENATE($ICCust_Dim.code)) + ");" +
+      "$VAL_P=(" + IF(CONCATENATE($Currency.code) = "", "XXX", CONCATENATE($Currency.code)) + ");" +
+      "$LUNPER_P=(" + IF(CONCATENATE($PeriodLength.code) = "", "LUN_0", CONCATENATE($PeriodLength.code)) + ");" +
+      "$TIP_P=(" + IF(CONCATENATE($AmountType.code) = "", "TIP_O", CONCATENATE($AmountType.code)) + ");" +
+      "$CAUS_P=(" + IF(CONCATENATE($Causal.code) = "", "$EB", CONCATENATE($Causal.code)) + ")"} AS PROMPT_FILTERS
+      FROM
             DATI_RETT_RIGA DRILL
       INNER JOIN
             CONTO C
