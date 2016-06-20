@@ -9,7 +9,8 @@ EXCEPTION
 	    IF SQLCODE != -942 THEN RAISE;
 		END IF;
 END;
-  
+
+/
 --------------------------------------------------------
 --  DDL for Table RB_STG_GL_01
 --------------------------------------------------------
@@ -57,6 +58,7 @@ CREATE TABLE "RB_STG_GL_01" (
 	AFFILIATE VARCHAR2(255),
 	OBU_AFFILIATE VARCHAR2(255),
 	PROJECT_ID VARCHAR2(255),
+  US_COA_ACCOUNT VARCHAR2(255),
     PROVENIENZA VARCHAR2(30),
     USERUPD VARCHAR2(30 BYTE),
     DATEUPD DATE

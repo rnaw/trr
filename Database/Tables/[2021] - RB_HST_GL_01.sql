@@ -10,6 +10,7 @@ EXCEPTION
     END IF;
 END;
   
+/
 --------------------------------------------------------
 --  DDL for Table RB_HST_GL_01
 --------------------------------------------------------
@@ -57,6 +58,7 @@ CREATE TABLE "RB_HST_GL_01" (
 	AFFILIATE VARCHAR2(5),
 	OBU_AFFILIATE VARCHAR2(10),
 	PROJECT_ID VARCHAR2(15),
+  US_COA_ACCOUNT VARCHAR2(30),
 	PROVENIENZA VARCHAR2(30),
 	USERUPD VARCHAR2(30 BYTE),
 	DATEUPD DATE

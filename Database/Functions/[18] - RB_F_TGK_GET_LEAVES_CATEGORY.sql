@@ -1,0 +1,37 @@
+--------------------------------------------------
+--  DDL for FUNCTION RB_F_TGK_GET_LEAVES_CATEGORY
+--------------------------------------------------
+
+CREATE OR REPLACE FUNCTION RB_F_TGK_GET_LEAVES_CATEGORY (
+  HIERARCHY_NODE_CODE IN VARCHAR2
+)
+RETURN RB_VARCHAR2_TABLE PIPELINED
+AS
+--  This function will return a table of a sigle column (COLUMN_VALUE)
+--  of all Elements that belongs to a certain HIERARCHY_NODE_CODE in a given
+--  HIERARCHY_CODE
+BEGIN
+  FOR R IN (
+    SELECT
+      A.COD_CATEGORIA
+    FROM
+      (
+        SELECT DISTINCT
+          COD_CATEGORIA_ELEGER
+        FROM
+          CATEGORIA_GERARCHIA
+        START WITH COD_CATEGORIA_ELEGER = HIERARCHY_NODE_CODE
+        CONNECT BY PRIOR COD_CATEGORIA_ELEGER = COD_CATEGORIA_ELEGER_PADRE
+      ) H
+      INNER JOIN
+      CATEGORIA_GERARCHIA_ABBIM A
+      ON
+          H.COD_CATEGORIA_ELEGER = A.COD_CATEGORIA_ELEGER
+  ) LOOP
+  
+    PIPE ROW(R.COD_CATEGORIA);
+  
+  END LOOP;
+  
+  RETURN;
+END;
